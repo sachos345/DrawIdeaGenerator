@@ -1,0 +1,351 @@
+/* --- Soft Pastel Blue Gradient Background --- */
+@keyframes gradientBG {
+  0% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: 0% 50%;
+  }
+}
+
+body {
+  margin: 0;
+  font-family: "Helvetica Neue", Arial, sans-serif;
+  background: linear-gradient(-45deg, #a1c4fd, #c2e9fb);
+  background-size: 400% 400%;
+  animation: gradientBG 20s ease infinite;
+  color: #333;
+  overflow-x: hidden;
+}
+
+/* Global Variables */
+:root {
+  --primary-color: #4a90e2;
+  --accent-color: #50e3c2;
+  --card-background: #ffffff;
+  --text-color: #333333;
+  --transition-speed: 0.3s;
+  --button-hover-scale: 1.05;
+  --soft-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+/* Main Container */
+.app-container {
+  max-width: 900px;
+  margin: 0 auto;
+  padding: 2rem 1rem;
+}
+
+/* Header */
+header {
+  text-align: center;
+  margin-bottom: 2rem;
+}
+
+header h1 {
+  font-size: 2.5rem;
+  margin-bottom: 0.5rem;
+  color: var(--primary-color);
+  text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.1);
+}
+
+header .subtitle {
+  font-size: 1.1rem;
+  color: var(--text-color);
+  margin-bottom: 1rem;
+}
+
+/* Mode Selection Buttons */
+.mode-selection {
+  display: flex;
+  justify-content: center;
+  gap: 1rem;
+  flex-wrap: wrap;
+  margin-bottom: 1.5rem;
+}
+
+.mode-selection button {
+  background-color: var(--primary-color);
+  border: none;
+  color: #fff;
+  padding: 0.75rem 1.5rem;
+  font-size: 1rem;
+  border-radius: 30px;
+  cursor: pointer;
+  transition: transform var(--transition-speed) ease,
+    background-color var(--transition-speed) ease;
+  box-shadow: var(--soft-shadow);
+}
+
+.mode-selection button.active,
+.mode-selection button:hover {
+  background-color: var(--accent-color);
+  transform: scale(var(--button-hover-scale));
+}
+
+/* Category Selector */
+.category-container {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 1rem;
+}
+
+.category-selector {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.category-selector label {
+  font-size: 1rem;
+  font-weight: 500;
+}
+
+.category-selector select {
+  padding: 0.5rem;
+  border: 1px solid #ddd;
+  border-radius: 20px;
+  background-color: var(--card-background);
+  transition: border-color var(--transition-speed) ease;
+}
+
+.category-selector select:focus {
+  outline: none;
+  border-color: var(--primary-color);
+}
+
+/* Idea Wrapper: Contains the Idea Display and Sidecard */
+.idea-wrapper {
+  position: relative;
+  display: flex;
+  align-items: flex-start;
+  gap: 1rem;
+}
+
+/* Favorites Sidebar positioned relative to the idea-wrapper */
+.favorites-sidebar {
+  position: absolute;
+  top: 0; /* Align with the top of the idea card */
+  left: -150px; /* Push it to the side (adjust as needed) */
+  width: 40px;
+  background: rgba(255, 255, 255, 0.9);
+  border-top-right-radius: 8px;
+  border-bottom-right-radius: 8px;
+  box-shadow: var(--soft-shadow);
+  transition: width var(--transition-speed) ease;
+  overflow: hidden;
+  z-index: 1000;
+}
+
+.favorites-sidebar:hover {
+  width: 150px;
+}
+
+.favorites-sidebar .sidebar-tab {
+  padding: 10px;
+  text-align: center;
+  font-size: 1.5rem;
+  border-bottom: 1px solid #ddd;
+}
+
+.favorites-sidebar .sidebar-content {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 10px;
+}
+
+.favorites-sidebar .sidebar-content button {
+  background-color: var(--primary-color);
+  border: none;
+  color: #fff;
+  padding: 0.5rem 1rem;
+  border-radius: 20px;
+  cursor: pointer;
+  transition: opacity var(--transition-speed) ease, transform 0.2s ease;
+  font-size: 0.9rem;
+  opacity: 0;
+}
+
+.favorites-sidebar:hover .sidebar-content button {
+  opacity: 1;
+}
+
+.favorites-sidebar .sidebar-content button:hover {
+  background-color: var(--accent-color);
+  transform: scale(var(--button-hover-scale));
+}
+
+/* Idea Display Area */
+.idea-display {
+  flex: 1;
+  background-color: var(--card-background);
+  padding: 2rem;
+  border-radius: 10px;
+  box-shadow: var(--soft-shadow);
+  text-align: center;
+  min-height: 100px;
+}
+
+/* Idea Card */
+.idea-card {
+  /* Now simply a container for the idea text */
+}
+
+.idea-text {
+  font-size: 1.2rem;
+  margin: 0;
+}
+
+/* Action Buttons Row */
+.action-buttons {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 2rem;
+}
+
+.action-buttons button {
+  background-color: var(--primary-color);
+  border: none;
+  color: #fff;
+  padding: 0.75rem 1.5rem;
+  border-radius: 30px;
+  cursor: pointer;
+  transition: transform var(--transition-speed) ease,
+    background-color var(--transition-speed) ease;
+  font-size: 1rem;
+  box-shadow: var(--soft-shadow);
+}
+
+.action-buttons button:hover {
+  background-color: var(--accent-color);
+  transform: scale(var(--button-hover-scale));
+}
+
+/* The Favorite button (heart) in the action row */
+.action-favorite-button {
+  /* This button is on the right of the row */
+}
+
+/* Timer Controls (Training Mode) */
+.timer-controls {
+  background-color: var(--card-background);
+  padding: 1.5rem;
+  border-radius: 10px;
+  box-shadow: var(--soft-shadow);
+  text-align: center;
+  margin-bottom: 2rem;
+  transition: transform var(--transition-speed) ease;
+}
+
+.timer-controls:hover {
+  transform: translateY(-5px);
+}
+
+.timer-controls h3 {
+  margin-bottom: 1rem;
+  color: var(--primary-color);
+}
+
+.timer-controls label {
+  margin-right: 0.5rem;
+}
+
+.timer-controls select {
+  padding: 0.5rem;
+  border: 1px solid #ddd;
+  border-radius: 20px;
+  background-color: var(--card-background);
+  transition: border-color var(--transition-speed) ease;
+}
+
+.timer-controls select:focus {
+  outline: none;
+  border-color: var(--primary-color);
+}
+
+.timer-controls .timer-display {
+  font-size: 1.5rem;
+  margin: 1rem 0;
+}
+
+/* Favorites List */
+.favorites-list {
+  background-color: var(--card-background);
+  padding: 1.5rem;
+  border-radius: 10px;
+  box-shadow: var(--soft-shadow);
+  transition: transform var(--transition-speed) ease;
+  margin-top: 1rem;
+}
+
+.favorites-list:hover {
+  transform: translateY(-5px);
+}
+
+.favorites-list h3 {
+  color: var(--primary-color);
+  margin-bottom: 1rem;
+}
+
+.favorites-list ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.favorites-list li {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0.75rem;
+  border-bottom: 1px solid #eee;
+  transition: background-color 0.2s ease;
+}
+
+.favorites-list li:hover {
+  background-color: #f7f7f7;
+}
+
+.favorites-list li:last-child {
+  border-bottom: none;
+}
+
+.favorites-list button {
+  background-color: transparent;
+  border: none;
+  color: var(--primary-color);
+  cursor: pointer;
+  transition: color var(--transition-speed) ease, transform 0.2s ease;
+}
+
+.favorites-list button:hover {
+  color: var(--accent-color);
+  transform: scale(var(--button-hover-scale));
+}
+
+/* Responsive Adjustments */
+@media (max-width: 768px) {
+  .mode-selection {
+    flex-direction: column;
+  }
+
+  .action-buttons {
+    flex-direction: column;
+    gap: 1rem;
+  }
+
+  .idea-wrapper {
+    flex-direction: column;
+  }
+
+  .favorites-sidebar {
+    position: static;
+    width: 100%;
+    margin-bottom: 1rem;
+  }
+}

@@ -1,23 +1,24 @@
 // src/components/TimerControls.tsx
 import React, { useState, useEffect } from "react";
+import ParticleExplosion from "./ParticleExplosion";
 
 interface TimerControlsProps {
   generateIdea: () => void;
 }
 
 const TimerControls: React.FC<TimerControlsProps> = ({ generateIdea }) => {
-  // Default duration: 5 minutes (300 seconds)
   const [duration, setDuration] = useState<number>(300);
-  const [timeLeft, setTimeLeft] = useState<number>(duration);
+  const [timeLeft, setTimeLeft] = useState<number>(300);
   const [isRunning, setIsRunning] = useState<boolean>(false);
+  const [isPaused, setIsPaused] = useState<boolean>(false);
+  const [showStartExplosion, setShowStartExplosion] = useState<boolean>(false);
 
   useEffect(() => {
     let timer: NodeJS.Timeout | null = null;
-    if (isRunning) {
+    if (isRunning && !isPaused) {
       timer = setInterval(() => {
         setTimeLeft((prev) => {
           if (prev <= 1) {
-            // When time is up, generate a new idea and reset the timer
             generateIdea();
             return duration;
           }
@@ -28,19 +29,26 @@ const TimerControls: React.FC<TimerControlsProps> = ({ generateIdea }) => {
     return () => {
       if (timer) clearInterval(timer);
     };
-  }, [isRunning, timeLeft, duration, generateIdea]);
+  }, [isRunning, isPaused, duration, generateIdea]);
 
   const handleStart = () => {
     setTimeLeft(duration);
     setIsRunning(true);
-    generateIdea(); // Generate an idea immediately when training starts
+    setIsPaused(false);
+    setShowStartExplosion(true); // Trigger explosion on Start
+    generateIdea();
+  };
+
+  const handlePauseResume = () => {
+    setIsPaused((prev) => !prev);
   };
 
   const handleStop = () => {
     setIsRunning(false);
+    setIsPaused(false);
+    setShowStartExplosion(false); // Ensure explosion is cleared when stopping
   };
 
-  // Helper function to format seconds as MM:SS
   const formatTime = (seconds: number) => {
     const m = Math.floor(seconds / 60)
       .toString()
@@ -49,31 +57,55 @@ const TimerControls: React.FC<TimerControlsProps> = ({ generateIdea }) => {
     return `${m}:${s}`;
   };
 
+  const progressPercentage = ((duration - timeLeft) / duration) * 100;
+
   return (
     <div className="timer-controls">
       <h3>Training Mode Timer</h3>
-      <label htmlFor="duration">Select Duration: </label>
-      <select
-        id="duration"
-        value={duration}
-        onChange={(e) => {
-          const newDuration = parseInt(e.target.value);
-          setDuration(newDuration);
-          setTimeLeft(newDuration);
-        }}
-      >
-        <option value={300}>5 Minutes</option>
-        <option value={600}>10 Minutes</option>
-        <option value={900}>15 Minutes</option>
-      </select>
+      <div className="timer-settings">
+        <label htmlFor="duration">Select Duration: </label>
+        <select
+          id="duration"
+          value={duration}
+          onChange={(e) => {
+            const newDuration = parseInt(e.target.value);
+            setDuration(newDuration);
+            setTimeLeft(newDuration);
+          }}
+        >
+          <option value={300}>5 Minutes</option>
+          <option value={600}>10 Minutes</option>
+          <option value={900}>15 Minutes</option>
+        </select>
+      </div>
       <div className="timer-display">
         <span>Time Left: {formatTime(timeLeft)}</span>
       </div>
-      {!isRunning ? (
-        <button onClick={handleStart}>Start Training</button>
-      ) : (
-        <button onClick={handleStop}>Stop Training</button>
-      )}
+      <div className="progress-bar">
+        <div
+          className="progress"
+          style={{ width: `${progressPercentage}%` }}
+        ></div>
+      </div>
+      <div className="timer-buttons">
+        {!isRunning ? (
+          <div className="button-container">
+            <button onClick={handleStart}>Start Training</button>
+            {showStartExplosion && (
+              <ParticleExplosion
+                onComplete={() => setShowStartExplosion(false)}
+              />
+            )}
+          </div>
+        ) : (
+          <>
+            <button onClick={handlePauseResume}>
+              {isPaused ? "Resume" : "Pause"}
+            </button>
+            <button onClick={handleStop}>Stop Training</button>
+          </>
+        )}
+      </div>
     </div>
   );
 };

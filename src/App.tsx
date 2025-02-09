@@ -6,6 +6,8 @@ import TimerControls from "./components/TimerControls";
 import FavoritesList from "./components/FavoritesList";
 import IdeaCard from "./components/IdeaCard";
 import FavoritesSidebar from "./components/FavoritesSidebar";
+import IdeaHistory from "./components/IdeaHistory";
+import ParticleExplosion from "./components/ParticleExplosion";
 import "./App.css";
 
 type Mode = "free" | "training";
@@ -16,6 +18,11 @@ const App: React.FC = () => {
   const [currentIdea, setCurrentIdea] = useState<string>("");
   const [favorites, setFavorites] = useState<string[]>([]);
   const [showFavorites, setShowFavorites] = useState<boolean>(false);
+  const [ideaHistory, setIdeaHistory] = useState<string[]>([]);
+  const [showIdeaHistory, setShowIdeaHistory] = useState<boolean>(false);
+  const [copyFeedback, setCopyFeedback] = useState<string>("");
+  const [showGenerateExplosion, setShowGenerateExplosion] =
+    useState<boolean>(false);
 
   // Load favorites from local storage on initial mount
   useEffect(() => {
@@ -56,6 +63,8 @@ const App: React.FC = () => {
     const randomPromptIndex = Math.floor(Math.random() * prompts.length);
     const idea = prompts[randomPromptIndex];
     setCurrentIdea(idea);
+    // Add the idea to the history (newest at the top)
+    setIdeaHistory((prev) => [idea, ...prev]);
   };
 
   const addFavorite = (idea: string) => {
@@ -70,6 +79,20 @@ const App: React.FC = () => {
 
   const toggleFavorites = () => {
     setShowFavorites((prev) => !prev);
+  };
+
+  const toggleIdeaHistory = () => {
+    setShowIdeaHistory((prev) => !prev);
+  };
+
+  const copyIdea = async () => {
+    try {
+      await navigator.clipboard.writeText(currentIdea);
+      setCopyFeedback("Copied!");
+      setTimeout(() => setCopyFeedback(""), 2000);
+    } catch (err) {
+      console.error("Failed to copy!", err);
+    }
   };
 
   return (
@@ -101,11 +124,13 @@ const App: React.FC = () => {
           />
         </div>
 
-        {/* Wrap the idea display and the sidecard together */}
+        {/* Idea Display with Sidebar */}
         <div className="idea-wrapper">
           <FavoritesSidebar
             showFavorites={showFavorites}
             toggleFavorites={toggleFavorites}
+            showIdeaHistory={showIdeaHistory}
+            toggleIdeaHistory={toggleIdeaHistory}
           />
           <div className="idea-display">
             {currentIdea ? (
@@ -116,25 +141,52 @@ const App: React.FC = () => {
           </div>
         </div>
 
-        {/* Action row with Generate Idea on the left and Favorite (heart) on the right */}
+        {/* Action Buttons */}
         <div className="action-buttons">
-          <button onClick={generateIdea}>Generate Idea</button>
+          {mode === "free" && (
+            <div className="button-container">
+              <button
+                onClick={() => {
+                  generateIdea();
+                  setShowGenerateExplosion(true);
+                }}
+              >
+                Generate Idea
+              </button>
+              {showGenerateExplosion && (
+                <ParticleExplosion
+                  onComplete={() => setShowGenerateExplosion(false)}
+                />
+              )}
+            </div>
+          )}
+          <button onClick={copyIdea} className="action-copy-button">
+            📋
+          </button>
           <button
             onClick={() => addFavorite(currentIdea)}
             className="action-favorite-button"
           >
             ❤️
           </button>
+          {copyFeedback && (
+            <span className="copy-feedback">{copyFeedback}</span>
+          )}
         </div>
 
+        {/* Training Mode Timer */}
         {mode === "training" && <TimerControls generateIdea={generateIdea} />}
 
+        {/* Favorites List */}
         {showFavorites && (
           <FavoritesList
             favorites={favorites}
             removeFavorite={removeFavorite}
           />
         )}
+
+        {/* Idea History (toggled via the sidebar) */}
+        {showIdeaHistory && <IdeaHistory history={ideaHistory} />}
       </main>
     </div>
   );

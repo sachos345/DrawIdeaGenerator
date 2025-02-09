@@ -349,3 +349,246 @@ header .subtitle {
     margin-bottom: 1rem;
   }
 }
+
+/* --- Progress Bar for TimerControls --- */
+.progress-bar {
+  width: 100%;
+  background-color: #ddd;
+  border-radius: 10px;
+  overflow: hidden;
+  margin: 1rem 0;
+  height: 10px;
+}
+.progress {
+  height: 100%;
+  background-color: var(--accent-color);
+  transition: width 0.5s ease;
+}
+
+/* --- Styling for the copy button and feedback in IdeaCard --- */
+.copy-button {
+  margin-top: 0.5rem;
+  padding: 0.4rem 0.8rem;
+  border: none;
+  background-color: var(--primary-color);
+  color: #fff;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background-color var(--transition-speed) ease;
+}
+.copy-button:hover {
+  background-color: var(--accent-color);
+}
+.copy-feedback {
+  display: block;
+  margin-top: 0.5rem;
+  color: green;
+  font-size: 0.9rem;
+}
+
+/* --- Basic styling for Idea History --- */
+.idea-history {
+  background-color: var(--card-background);
+  padding: 1.5rem;
+  border-radius: 10px;
+  box-shadow: var(--soft-shadow);
+  margin-top: 1rem;
+  text-align: left;
+}
+.idea-history h3 {
+  color: var(--primary-color);
+  margin-bottom: 1rem;
+}
+.idea-history ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+.idea-history li {
+  padding: 0.5rem 0;
+  border-bottom: 1px solid #eee;
+}
+.idea-history li:last-child {
+  border-bottom: none;
+}
+
+/* Action Buttons (Generate, Copy, Favorite) */
+.action-buttons button {
+  background-color: var(--primary-color);
+  border: none;
+  color: #fff;
+  padding: 0.75rem 1.5rem;
+  border-radius: 30px;
+  cursor: pointer;
+  transition: transform var(--transition-speed) ease,
+    background-color var(--transition-speed) ease;
+  font-size: 1rem;
+  box-shadow: var(--soft-shadow);
+  margin: 0 0.5rem;
+}
+.action-buttons button:hover {
+  background-color: var(--accent-color);
+  transform: scale(var(--button-hover-scale));
+}
+
+/* Copy feedback styling */
+.copy-feedback {
+  margin-left: 1rem;
+  font-size: 0.9rem;
+  color: green;
+}
+
+/* Sidebar buttons styling */
+.favorites-sidebar .sidebar-content button {
+  background-color: var(--primary-color);
+  border: none;
+  color: #fff;
+  padding: 0.5rem 1rem;
+  border-radius: 30px;
+  cursor: pointer;
+  transition: transform var(--transition-speed) ease,
+    background-color var(--transition-speed) ease;
+  margin: 0.25rem 0;
+  font-size: 0.9rem;
+  box-shadow: var(--soft-shadow);
+}
+.favorites-sidebar .sidebar-content button:hover {
+  background-color: var(--accent-color);
+  transform: scale(var(--button-hover-scale));
+}
+
+/* TimerControls buttons styling (to match global style) */
+.timer-controls button {
+  background-color: var(--primary-color);
+  border: none;
+  color: #fff;
+  padding: 0.75rem 1.5rem;
+  border-radius: 30px;
+  cursor: pointer;
+  transition: transform var(--transition-speed) ease,
+    background-color var(--transition-speed) ease;
+  font-size: 1rem;
+  box-shadow: var(--soft-shadow);
+  margin: 0.5rem;
+}
+.timer-controls button:hover {
+  background-color: var(--accent-color);
+  transform: scale(var(--button-hover-scale));
+}
+
+/* Progress bar styling for TimerControls */
+.progress-bar {
+  width: 100%;
+  background-color: #ddd;
+  border-radius: 10px;
+  overflow: hidden;
+  margin: 1rem 0;
+  height: 10px;
+}
+.progress {
+  height: 100%;
+  background-color: var(--accent-color);
+  transition: width 0.5s ease;
+}
+/* --- Shake Animation for IdeaCard --- */
+@keyframes shake {
+  0% {
+    transform: translateX(0);
+  }
+  20% {
+    transform: translateX(-5px);
+  }
+  40% {
+    transform: translateX(5px);
+  }
+  60% {
+    transform: translateX(-5px);
+  }
+  80% {
+    transform: translateX(5px);
+  }
+  100% {
+    transform: translateX(0);
+  }
+}
+.shake {
+  animation: shake 0.5s;
+}
+
+/* --- Particle Explosion Styles --- */
+.button-container {
+  position: relative;
+  display: inline-block;
+}
+
+.particle-explosion {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  pointer-events: none;
+  transform: translate(-50%, -50%);
+  z-index: 10;
+}
+
+.particle {
+  position: absolute;
+  width: 10px; /* increased size */
+  height: 10px; /* increased size */
+  border-radius: 50%;
+  animation: explode 0.8s ease-out forwards;
+}
+
+@keyframes explode {
+  from {
+    opacity: 1;
+    transform: translate(0, 0) scale(1);
+  }
+  to {
+    opacity: 0;
+    /* The custom properties --x and --y are used for random offsets */
+    transform: translate(var(--x), var(--y)) scale(0.5);
+  }
+}
+
+/* --- Global Button Styling (unchanged from previous update) --- */
+.action-buttons button,
+.timer-controls button {
+  background-color: var(--primary-color);
+  border: none;
+  color: #fff;
+  padding: 0.75rem 1.5rem;
+  border-radius: 30px;
+  cursor: pointer;
+  transition: transform var(--transition-speed) ease,
+    background-color var(--transition-speed) ease;
+  font-size: 1rem;
+  box-shadow: var(--soft-shadow);
+  margin: 0 0.5rem;
+}
+.action-buttons button:hover,
+.timer-controls button:hover {
+  background-color: var(--accent-color);
+  transform: scale(var(--button-hover-scale));
+}
+
+/* --- Progress Bar (for TimerControls) --- */
+.progress-bar {
+  width: 100%;
+  background-color: #ddd;
+  border-radius: 10px;
+  overflow: hidden;
+  margin: 1rem 0;
+  height: 10px;
+}
+.progress {
+  height: 100%;
+  background-color: var(--accent-color);
+  transition: width 0.5s ease;
+}
+
+/* --- Copy feedback styling --- */
+.copy-feedback {
+  margin-left: 1rem;
+  font-size: 0.9rem;
+  color: green;
+}

@@ -129,7 +129,7 @@ header .subtitle {
 .favorites-sidebar {
   position: absolute;
   top: 0; /* Align with the top of the idea card */
-  left: -150px; /* Push it to the side (adjust as needed) */
+  left: -510px; /* Push it to the side (adjust as needed) */
   width: 40px;
   background: rgba(255, 255, 255, 0.9);
   border-top-right-radius: 8px;
@@ -192,18 +192,23 @@ header .subtitle {
 
 /* Idea Card */
 .idea-card {
-  /* Now simply a container for the idea text */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  /* Optionally, set a fixed height if needed */
+  height: 150px;
 }
 
 .idea-text {
   font-size: 1.2rem;
   margin: 0;
+  text-align: center; /* Ensures multi-line text is centered */
 }
 
 /* Action Buttons Row */
 .action-buttons {
   display: flex;
-  justify-content: space-between;
+  justify-content: right;
   align-items: center;
   margin-top: 2rem;
 }
@@ -226,11 +231,6 @@ header .subtitle {
   transform: scale(var(--button-hover-scale));
 }
 
-/* The Favorite button (heart) in the action row */
-.action-favorite-button {
-  /* This button is on the right of the row */
-}
-
 /* Timer Controls (Training Mode) */
 .timer-controls {
   background-color: var(--card-background);
@@ -239,6 +239,7 @@ header .subtitle {
   box-shadow: var(--soft-shadow);
   text-align: center;
   margin-bottom: 2rem;
+  margin-top: 1rem;
   transition: transform var(--transition-speed) ease;
 }
 
@@ -521,19 +522,10 @@ header .subtitle {
   display: inline-block;
 }
 
-.particle-explosion {
-  position: absolute;
-  left: 50%;
-  top: 50%;
-  pointer-events: none;
-  transform: translate(-50%, -50%);
-  z-index: 10;
-}
-
 .particle {
   position: absolute;
-  width: 10px; /* increased size */
-  height: 10px; /* increased size */
+  width: 10px; /* Larger size */
+  height: 10px;
   border-radius: 50%;
   animation: explode 0.8s ease-out forwards;
 }
@@ -545,9 +537,35 @@ header .subtitle {
   }
   to {
     opacity: 0;
-    /* The custom properties --x and --y are used for random offsets */
     transform: translate(var(--x), var(--y)) scale(0.5);
   }
+}
+.copy-button-wrapper {
+  position: relative;
+  display: inline-block;
+}
+
+/* Float-up animation for copy feedback */
+@keyframes floatUp {
+  0% {
+    opacity: 1;
+    transform: translate(-50%, 0);
+  }
+  100% {
+    opacity: 0;
+    transform: translate(-50%, -20px);
+  }
+}
+
+.copy-feedback {
+  position: absolute;
+  left: 30%;
+  bottom: 100%; /* Position it above the button */
+  transform: translate(-50%, 0);
+  animation: floatUp 1s ease-out forwards;
+  pointer-events: none;
+  font-size: 0.9rem;
+  color: green;
 }
 
 /* --- Global Button Styling (unchanged from previous update) --- */

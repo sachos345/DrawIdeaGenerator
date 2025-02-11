@@ -12,6 +12,12 @@ import "./App.css";
 
 type Mode = "free" | "training";
 
+interface Explosion {
+  id: number;
+  x: number;
+  y: number;
+}
+
 const App: React.FC = () => {
   const [mode, setMode] = useState<Mode>("free");
   const [selectedCategory, setSelectedCategory] = useState<string>("All");
@@ -21,8 +27,8 @@ const App: React.FC = () => {
   const [ideaHistory, setIdeaHistory] = useState<string[]>([]);
   const [showIdeaHistory, setShowIdeaHistory] = useState<boolean>(false);
   const [copyFeedback, setCopyFeedback] = useState<string>("");
-  const [showGenerateExplosion, setShowGenerateExplosion] =
-    useState<boolean>(false);
+  // Instead of a single explosion, maintain an array to allow multiple explosions.
+  const [explosions, setExplosions] = useState<Explosion[]>([]);
 
   // Load favorites from local storage on initial mount
   useEffect(() => {
@@ -95,6 +101,17 @@ const App: React.FC = () => {
     }
   };
 
+  // Adds a new explosion object with the mouse click coordinates.
+  const addExplosion = (x: number, y: number) => {
+    const newExplosion = { id: Date.now(), x, y };
+    setExplosions((prev) => [...prev, newExplosion]);
+  };
+
+  // Removes an explosion from the array once its animation is complete.
+  const removeExplosion = (id: number) => {
+    setExplosions((prev) => prev.filter((exp) => exp.id !== id));
+  };
+
   return (
     <div className="app-container">
       <header>
@@ -141,37 +158,46 @@ const App: React.FC = () => {
           </div>
         </div>
 
-        {/* Action Buttons */}
+        {/* Action Buttons (Generate Idea, Copy and Favorite) */}
         <div className="action-buttons">
-          {mode === "free" && (
-            <div className="button-container">
-              <button
-                onClick={() => {
-                  generateIdea();
-                  setShowGenerateExplosion(true);
-                }}
-              >
-                Generate Idea
-              </button>
-              {showGenerateExplosion && (
-                <ParticleExplosion
-                  onComplete={() => setShowGenerateExplosion(false)}
-                />
-              )}
-            </div>
-          )}
-          <button onClick={copyIdea} className="action-copy-button">
-            📋
-          </button>
+          <div>
+            {mode === "free" && (
+              <div className="generate-idea-container">
+                <button
+                  onClick={(e) => {
+                    generateIdea();
+                    // Spawn an explosion at the mouse position
+                    addExplosion(e.clientX, e.clientY);
+                  }}
+                >
+                  Generate Idea
+                </button>
+                {/* Render all active explosions */}
+                {explosions.map((exp) => (
+                  <ParticleExplosion
+                    key={exp.id}
+                    x={exp.x}
+                    y={exp.y}
+                    onComplete={() => removeExplosion(exp.id)}
+                  />
+                ))}
+              </div>
+            )}
+          </div>
+          <div className="copy-button-wrapper">
+            <button onClick={copyIdea} className="action-copy-button">
+              📋
+            </button>
+            {copyFeedback && (
+              <span className="copy-feedback">{copyFeedback}</span>
+            )}
+          </div>
           <button
             onClick={() => addFavorite(currentIdea)}
             className="action-favorite-button"
           >
             ❤️
           </button>
-          {copyFeedback && (
-            <span className="copy-feedback">{copyFeedback}</span>
-          )}
         </div>
 
         {/* Training Mode Timer */}

@@ -6,12 +6,18 @@ interface TimerControlsProps {
   generateIdea: () => void;
 }
 
+interface Explosion {
+  id: number;
+  x: number;
+  y: number;
+}
+
 const TimerControls: React.FC<TimerControlsProps> = ({ generateIdea }) => {
   const [duration, setDuration] = useState<number>(300);
   const [timeLeft, setTimeLeft] = useState<number>(300);
   const [isRunning, setIsRunning] = useState<boolean>(false);
   const [isPaused, setIsPaused] = useState<boolean>(false);
-  const [showStartExplosion, setShowStartExplosion] = useState<boolean>(false);
+  const [explosions, setExplosions] = useState<Explosion[]>([]);
 
   useEffect(() => {
     let timer: NodeJS.Timeout | null = null;
@@ -31,11 +37,21 @@ const TimerControls: React.FC<TimerControlsProps> = ({ generateIdea }) => {
     };
   }, [isRunning, isPaused, duration, generateIdea]);
 
-  const handleStart = () => {
+  const addExplosion = (x: number, y: number) => {
+    const newExplosion = { id: Date.now(), x, y };
+    setExplosions((prev) => [...prev, newExplosion]);
+  };
+
+  const removeExplosion = (id: number) => {
+    setExplosions((prev) => prev.filter((exp) => exp.id !== id));
+  };
+
+  const handleStart = (e: React.MouseEvent<HTMLButtonElement>) => {
     setTimeLeft(duration);
     setIsRunning(true);
     setIsPaused(false);
-    setShowStartExplosion(true); // Trigger explosion on Start
+    // Capture mouse coordinates on button click:
+    addExplosion(e.clientX, e.clientY);
     generateIdea();
   };
 
@@ -46,7 +62,8 @@ const TimerControls: React.FC<TimerControlsProps> = ({ generateIdea }) => {
   const handleStop = () => {
     setIsRunning(false);
     setIsPaused(false);
-    setShowStartExplosion(false); // Ensure explosion is cleared when stopping
+    // Optionally clear explosions (or let them finish)
+    setExplosions([]);
   };
 
   const formatTime = (seconds: number) => {
@@ -91,11 +108,14 @@ const TimerControls: React.FC<TimerControlsProps> = ({ generateIdea }) => {
         {!isRunning ? (
           <div className="button-container">
             <button onClick={handleStart}>Start Training</button>
-            {showStartExplosion && (
+            {explosions.map((exp) => (
               <ParticleExplosion
-                onComplete={() => setShowStartExplosion(false)}
+                key={exp.id}
+                x={exp.x}
+                y={exp.y}
+                onComplete={() => removeExplosion(exp.id)}
               />
-            )}
+            ))}
           </div>
         ) : (
           <>
